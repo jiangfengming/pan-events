@@ -3,7 +3,7 @@ Add `panstart`, `panmove` and `panend` custom events to an element, support touc
 
 ## Demo
 
-Open it in desktop or mobile browser: [demo](http://jiangfengming.github.io/pan-events/example.html)
+Open it in desktop or mobile browser: [demo](https://jiangfengming.github.io/pan-events/example.html)
 
 ## Usage
 
