@@ -1,0 +1,50 @@
+{
+  "name": "pan-events",
+  "version": "0.0.0",
+  "description": "panstart, panmove and panend events",
+  "main": "dist/pan-events.js",
+  "scripts": {
+    "build": "rollup -c rollup.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jiangfengming/pan-events.git"
+  },
+  "keywords": [
+    "panstart",
+    "panmove",
+    "panend"
+  ],
+  "author": "Jiang Fengming",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jiangfengming/pan-events/issues"
+  },
+  "homepage": "https://github.com/jiangfengming/pan-events#readme",
+  "devDependencies": {
+    "@babel/core": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "babel-eslint": "^10.0.3",
+    "eslint": "^6.7.1",
+    "eslint-config-enough": "^0.3.8",
+    "rollup": "^1.27.5",
+    "rollup-plugin-babel": "^4.3.3"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "loose": true,
+          "modules": false
+        }
+      ]
+    ]
+  },
+  "eslintConfig": {
+    "extends": "enough",
+    "env": {
+      "browser": true
+    }
+  }
+}

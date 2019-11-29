@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>pan-events</title>
+  <style>
+  #box {
+    width: 50px;
+    height: 50px;
+    background: red;
+    margin: 100px auto;
+  }
+  </style>
+</head>
+<body>
+  <button id="off">off</button>
+  <div id="box"></div>
+
+  <script type="module">
+  import panEvents from './src/index.js'
+
+  const box = document.getElementById('box')
+  const off = panEvents(box)
+
+  box.addEventListener('panstart', e => {
+    console.log('panstart', e.detail)
+  })
+
+  box.addEventListener('panmove', e => {
+    console.log('panmove', e.detail)
+    box.style = `transform: translate(${e.detail.offsetX}px, ${e.detail.offsetY}px)`
+  })
+
+  box.addEventListener('panend', e => {
+    console.log('panend', e.detail)
+    box.style = ''
+  })
+
+  document.getElementById('off').addEventListener('click', off)
+  </script>
+</body>
+</html>
