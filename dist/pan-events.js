@@ -19,8 +19,8 @@ function index (element) {
 
     if (panstart()) {
       startPosition = createDetail(e);
-      element.addEventListener('mousemove', mousemove);
-      element.addEventListener('mouseup', mouseup);
+      window.addEventListener('mousemove', mousemove);
+      window.addEventListener('mouseup', mouseup);
       off();
     }
   }
@@ -62,8 +62,8 @@ function index (element) {
   }
 
   function mouseup(e) {
-    element.removeEventListener('mousemove', mousemove);
-    element.removeEventListener('mouseup', mouseup);
+    window.removeEventListener('mousemove', mousemove);
+    window.removeEventListener('mouseup', mouseup);
     panend(e);
   }
 
