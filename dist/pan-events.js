@@ -1,41 +1,53 @@
 function index (element) {
-  var touchId, startPosition, panning;
+  var touchId, startPosition;
 
   function touchstart(e) {
     touchId = e.changedTouches[0].identifier;
     startPosition = createDetail(e.changedTouches[0]);
-    window.addEventListener('touchmove', touchmove);
-    window.addEventListener('touchend', touchend);
-    off();
+
+    if (panstart()) {
+      element.addEventListener('touchmove', touchmove);
+      element.addEventListener('touchend', touchend);
+      off();
+    }
   }
 
   function mousedown(e) {
-    startPosition = createDetail(e);
-    window.addEventListener('mousemove', mousemove);
-    window.addEventListener('mouseup', mouseup);
-    off();
+    if (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents) {
+      return;
+    }
+
+    if (panstart()) {
+      startPosition = createDetail(e);
+      element.addEventListener('mousemove', mousemove);
+      element.addEventListener('mouseup', mouseup);
+      off();
+    }
+  }
+
+  function panstart() {
+    return element.dispatchEvent(new CustomEvent('panstart', {
+      detail: startPosition,
+      cancelable: true
+    }));
   }
 
   function touchmove(e) {
     var data = getTouchById(e, touchId);
 
     if (data) {
-      panmove(data);
+      if (!panmove(data) && e.cancelable) {
+        e.preventDefault();
+      }
     }
   }
 
   var mousemove = panmove;
 
   function panmove(data) {
-    if (!panning) {
-      element.dispatchEvent(new CustomEvent('panstart', {
-        detail: startPosition
-      }));
-      panning = true;
-    }
-
-    element.dispatchEvent(new CustomEvent('panmove', {
-      detail: createDetail(data, startPosition)
+    return element.dispatchEvent(new CustomEvent('panmove', {
+      detail: createDetail(data, startPosition),
+      cancelable: true
     }));
   }
 
@@ -43,28 +55,24 @@ function index (element) {
     var data = getTouchById(e, touchId);
 
     if (data) {
-      window.removeEventListener('touchmove', touchmove);
-      window.removeEventListener('touchend', touchend);
+      element.removeEventListener('touchmove', touchmove);
+      element.removeEventListener('touchend', touchend);
       panend(data);
     }
   }
 
   function mouseup(e) {
-    window.removeEventListener('mousemove', mousemove);
-    window.removeEventListener('mouseup', mouseup);
+    element.removeEventListener('mousemove', mousemove);
+    element.removeEventListener('mouseup', mouseup);
     panend(e);
   }
 
   function panend(data) {
-    if (panning) {
-      element.dispatchEvent(new CustomEvent('panend', {
-        detail: createDetail(data, startPosition)
-      }));
-    }
-
+    element.dispatchEvent(new CustomEvent('panend', {
+      detail: createDetail(data, startPosition)
+    }));
     touchId = null;
     startPosition = null;
-    panning = false;
     on();
   }
 

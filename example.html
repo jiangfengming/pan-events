@@ -29,6 +29,10 @@
 
   box.addEventListener('panmove', e => {
     console.log('panmove', e.detail)
+
+    // prevent pull-to-refresh of mobile Chrome
+    e.preventDefault()
+
     box.style = `transform: translate(${e.detail.offsetX}px, ${e.detail.offsetY}px)`
   })
 

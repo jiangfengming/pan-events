@@ -2,11 +2,9 @@
 Add `panstart`, `panmove` and `panend` custom events to an element, support touch and mouse.
 
 ## Demo
-
 Open it in desktop or mobile browser: [demo](https://jiangfengming.github.io/pan-events/example.html)
 
 ## Usage
-
 ```html
 <!DOCTYPE html>
 <html lang="en">
@@ -39,6 +37,10 @@ Open it in desktop or mobile browser: [demo](https://jiangfengming.github.io/pan
 
   box.addEventListener('panmove', e => {
     console.log('panmove', e.detail)
+
+    // prevent pull-to-refresh of mobile Chrome
+    e.preventDefault()
+
     box.style = `transform: translate(${e.detail.offsetX}px, ${e.detail.offsetY}px)`
   })
 
@@ -54,19 +56,16 @@ Open it in desktop or mobile browser: [demo](https://jiangfengming.github.io/pan
 ```
 
 ## Install
-
 ```
 npm install pan-events
 ```
 
 ## Import
-
 ```js
 import panEvents from 'pan-events'
 ```
 
 ## panEvents
-
 ```js
 const off = panEvents(element)
 ```
@@ -78,7 +77,6 @@ to the element.
 A function to remove listeners.
 
 ## Events
-
 After `panEvents` is called on an element, it will have `panstart`, `panmove`, and `panend` events.
 
 ```js
@@ -110,6 +108,12 @@ element.addEventListener('panend', event => {
 
 `panmove` and `panend` have additional `offsetX` and `offsetY` properties, which are relative to the position of
 `panstart` event.
+
+### preventDefault
+If `event.preventDefault()` is called in `panstart` event, subsequent `panmove` won't be fired.
+
+If `event.preventDefault()` is called in `panmove` event, and the original event is `touchmove`, the `touchmove`
+event is prevented. This is used to prevent pull-to-refresh of mobile Chrome and scrolling.
 
 ## License
 [MIT](LICENSE)
