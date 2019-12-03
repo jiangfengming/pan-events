@@ -110,8 +110,6 @@ element.addEventListener('panend', event => {
 `panstart` event.
 
 ### preventDefault
-If `event.preventDefault()` is called in `panstart` event, subsequent `panmove` won't be fired.
-
 If `event.preventDefault()` is called in `panmove` event, and the original event is `touchmove`, the `touchmove`
 event is prevented. This is used to prevent pull-to-refresh of mobile Chrome and scrolling.
 

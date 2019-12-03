@@ -4,12 +4,8 @@ function index (element) {
   function touchstart(e) {
     touchId = e.changedTouches[0].identifier;
     startPosition = createDetail(e.changedTouches[0]);
-
-    if (panstart()) {
-      element.addEventListener('touchmove', touchmove);
-      element.addEventListener('touchend', touchend);
-      off();
-    }
+    panstart();
+    off();
   }
 
   function mousedown(e) {
@@ -17,18 +13,16 @@ function index (element) {
       return;
     }
 
-    if (panstart()) {
-      startPosition = createDetail(e);
-      window.addEventListener('mousemove', mousemove);
-      window.addEventListener('mouseup', mouseup);
-      off();
-    }
+    panstart();
+    startPosition = createDetail(e);
+    window.addEventListener('mousemove', mousemove);
+    window.addEventListener('mouseup', mouseup);
+    off();
   }
 
   function panstart() {
     return element.dispatchEvent(new CustomEvent('panstart', {
-      detail: startPosition,
-      cancelable: true
+      detail: startPosition
     }));
   }
 
@@ -55,8 +49,6 @@ function index (element) {
     var data = getTouchById(e, touchId);
 
     if (data) {
-      element.removeEventListener('touchmove', touchmove);
-      element.removeEventListener('touchend', touchend);
       panend(data);
     }
   }
@@ -112,8 +104,14 @@ function index (element) {
     element.removeEventListener('mousedown', mousedown);
   }
 
+  element.addEventListener('touchmove', touchmove);
+  element.addEventListener('touchend', touchend);
   on();
-  return off;
+  return function destroy() {
+    off();
+    element.removeEventListener('touchmove', touchmove);
+    element.removeEventListener('touchend', touchend);
+  };
 }
 
 export default index;
