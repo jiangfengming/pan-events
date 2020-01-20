@@ -4,7 +4,7 @@ export default function(element) {
   function touchstart(e) {
     touchId = e.changedTouches[0].identifier
     startPosition = createDetail(e.changedTouches[0])
-    panstart()
+    panstart(startPosition)
     off()
   }
 
@@ -13,14 +13,14 @@ export default function(element) {
       return
     }
 
-    panstart()
     startPosition = createDetail(e)
+    panstart(startPosition)
     window.addEventListener('mousemove', mousemove)
     window.addEventListener('mouseup', mouseup)
     off()
   }
 
-  function panstart() {
+  function panstart(startPosition) {
     return element.dispatchEvent(
       new CustomEvent('panstart', {
         detail: startPosition
