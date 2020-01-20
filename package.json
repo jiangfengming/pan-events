@@ -1,6 +1,6 @@
 {
   "name": "pan-events",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "panstart, panmove and panend events",
   "main": "dist/pan-events.js",
   "scripts": {
