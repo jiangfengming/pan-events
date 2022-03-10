@@ -95,8 +95,8 @@ export default function(element) {
 
   function getTouchById(e, id) {
     for (let i = 0; i < e.changedTouches.length; i++) {
-      if (e.changedTouches[0].identifier === id) {
-        return e.changedTouches[0]
+      if (e.changedTouches[i].identifier === id) {
+        return e.changedTouches[i]
       }
     }
   }
