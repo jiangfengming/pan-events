@@ -1,23 +1,23 @@
 export default function(element) {
-  let touchId, startPosition
+  let touchId, startPosition;
 
   function touchstart(e) {
-    touchId = e.changedTouches[0].identifier
-    startPosition = createDetail(e.changedTouches[0])
-    panstart(startPosition)
-    off()
+    touchId = e.changedTouches[0].identifier;
+    startPosition = createDetail(e.changedTouches[0]);
+    panstart(startPosition);
+    off();
   }
 
   function mousedown(e) {
     if (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents) {
-      return
+      return;
     }
 
-    startPosition = createDetail(e)
-    panstart(startPosition)
-    window.addEventListener('mousemove', mousemove)
-    window.addEventListener('mouseup', mouseup)
-    off()
+    startPosition = createDetail(e);
+    panstart(startPosition);
+    window.addEventListener('mousemove', mousemove);
+    window.addEventListener('mouseup', mouseup);
+    off();
   }
 
   function panstart(startPosition) {
@@ -25,20 +25,20 @@ export default function(element) {
       new CustomEvent('panstart', {
         detail: startPosition
       })
-    )
+    );
   }
 
   function touchmove(e) {
-    const data = getTouchById(e, touchId)
+    const data = getTouchById(e, touchId);
 
     if (data) {
       if (!panmove(data) && e.cancelable) {
-        e.preventDefault()
+        e.preventDefault();
       }
     }
   }
 
-  const mousemove = panmove
+  const mousemove = panmove;
 
   function panmove(data) {
     return element.dispatchEvent(
@@ -46,21 +46,21 @@ export default function(element) {
         detail: createDetail(data, startPosition),
         cancelable: true
       })
-    )
+    );
   }
 
   function touchend(e) {
-    const data = getTouchById(e, touchId)
+    const data = getTouchById(e, touchId);
 
     if (data) {
-      panend(data)
+      panend(data);
     }
   }
 
   function mouseup(e) {
-    window.removeEventListener('mousemove', mousemove)
-    window.removeEventListener('mouseup', mouseup)
-    panend(e)
+    window.removeEventListener('mousemove', mousemove);
+    window.removeEventListener('mouseup', mouseup);
+    panend(e);
   }
 
   function panend(data) {
@@ -68,11 +68,11 @@ export default function(element) {
       new CustomEvent('panend', {
         detail: createDetail(data, startPosition)
       })
-    )
+    );
 
-    touchId = null
-    startPosition = null
-    on()
+    touchId = null;
+    startPosition = null;
+    on();
   }
 
   function createDetail(data, startPosition) {
@@ -83,42 +83,42 @@ export default function(element) {
       clientY: data.clientY,
       pageX: data.pageX,
       pageY: data.pageY
-    }
+    };
 
     if (startPosition) {
-      detail.offsetX = data.clientX - startPosition.clientX
-      detail.offsetY = data.clientY - startPosition.clientY
+      detail.offsetX = data.clientX - startPosition.clientX;
+      detail.offsetY = data.clientY - startPosition.clientY;
     }
 
-    return detail
+    return detail;
   }
 
   function getTouchById(e, id) {
     for (let i = 0; i < e.changedTouches.length; i++) {
       if (e.changedTouches[i].identifier === id) {
-        return e.changedTouches[i]
+        return e.changedTouches[i];
       }
     }
   }
 
   function on() {
-    element.addEventListener('touchstart', touchstart)
-    element.addEventListener('mousedown', mousedown)
+    element.addEventListener('touchstart', touchstart);
+    element.addEventListener('mousedown', mousedown);
   }
 
   function off() {
-    element.removeEventListener('touchstart', touchstart)
-    element.removeEventListener('mousedown', mousedown)
+    element.removeEventListener('touchstart', touchstart);
+    element.removeEventListener('mousedown', mousedown);
   }
 
-  element.addEventListener('touchmove', touchmove)
-  element.addEventListener('touchend', touchend)
+  element.addEventListener('touchmove', touchmove);
+  element.addEventListener('touchend', touchend);
 
-  on()
+  on();
 
   return function destroy() {
-    off()
-    element.removeEventListener('touchmove', touchmove)
-    element.removeEventListener('touchend', touchend)
-  }
+    off();
+    element.removeEventListener('touchmove', touchmove);
+    element.removeEventListener('touchend', touchend);
+  };
 }
